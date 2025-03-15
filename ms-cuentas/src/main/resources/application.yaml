@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: ms-cuentas
+  datasource:
+    url: jdbc:postgresql://localhost:5132/ms_redis
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+logging:
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 500
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz
+  level:
+    root: info
+    web: debug
