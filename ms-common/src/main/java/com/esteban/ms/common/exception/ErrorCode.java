@@ -8,8 +8,10 @@ public enum ErrorCode {
 
     U001("Unexpected error.", 500),
     A001("Illegal argument.", 400),
-    A002("Identification alredy exists.", 400),
+    A002("Identification already exists.", 400),
     A003("Cliente not found.", 400),
+    A004("Cuenta already exists.", 400),
+    A005("Cuenta not found.", 400),
     N404("Not found.", 404),
     ;
 

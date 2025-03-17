@@ -26,6 +26,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":ms-common"))
     implementation(libs.bundles.spring)
     compileOnly(libs.lombok)
     developmentOnly(libs.devtools)
@@ -33,7 +34,8 @@ dependencies {
     annotationProcessor(libs.lombok)
     testImplementation(libs.test)
     testRuntimeOnly(libs.junit)
-    implementation(project(":ms-common"))
+    implementation(libs.mapstruct)
+    annotationProcessor(libs.mapstruct.processor)
 }
 
 tasks.withType<Test> {
