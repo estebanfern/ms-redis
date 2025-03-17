@@ -13,6 +13,8 @@ import com.esteban.ms.cuentas.service.CuentaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -29,6 +31,7 @@ public class CuentaServiceImpl implements CuentaService {
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class, propagation = Propagation.REQUIRED)
     public CuentaOut crearCuenta(CrearCuentaIn input) throws MSException {
         if (cuentaRepository.existsById(input.getNumeroCuenta())) {
             log.warn("Account with number {} already exists", input.getNumeroCuenta());
@@ -40,15 +43,7 @@ public class CuentaServiceImpl implements CuentaService {
         Cuenta cuenta = cuentaMapper.toEntity(input);
         cuenta.setSaldo(BigDecimal.valueOf(0));
         cuenta.setActive(true);
-        try {
-            cuentaRepository.save(cuenta);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Cliente with id {} not found.", input.getClienteId());
-            throw new MSException(
-                    Location.CUENTAS,
-                    ErrorCode.A003
-            );
-        }
+        save(cuenta);
         CuentaOut cuentaOut = cuentaMapper.toOutput(cuenta);
         log.debug("Account created: {}", cuentaOut);
         return cuentaOut;
@@ -59,9 +54,22 @@ public class CuentaServiceImpl implements CuentaService {
         log.info("Editing account {}", input);
         Cuenta cuenta = findById(input.getNumeroCuenta());
         cuentaMapper.updateFromDTO(input, cuenta);
-        cuentaRepository.save(cuenta);
+        save(cuenta);
         log.debug("Account edited: {}", cuenta);
         return cuentaMapper.toOutput(cuenta);
+    }
+
+    @Override
+    public void save(Cuenta cuenta) throws MSException {
+        try {
+            cuentaRepository.save(cuenta);
+        } catch (DataIntegrityViolationException e) {
+            log.warn("Cliente with id {} not found.", cuenta.getCliente().getId());
+            throw new MSException(
+                    Location.CUENTAS,
+                    ErrorCode.A003
+            );
+        }
     }
 
     @Override
@@ -69,7 +77,8 @@ public class CuentaServiceImpl implements CuentaService {
         return cuentaMapper.toOutput(findById(id));
     }
 
-    private Cuenta findById(String id) throws MSException {
+    @Override
+    public Cuenta findById(String id) throws MSException {
         return cuentaRepository.findById(id).orElseThrow(
                 () -> {
                     log.warn("Account with number {} not found.", id);
