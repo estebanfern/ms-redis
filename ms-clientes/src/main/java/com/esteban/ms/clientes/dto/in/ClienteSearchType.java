@@ -1,4 +1,4 @@
-package com.esteban.ms.clientes.dto.input;
+package com.esteban.ms.clientes.dto.in;
 
 public enum ClienteSearchType {
     ID,

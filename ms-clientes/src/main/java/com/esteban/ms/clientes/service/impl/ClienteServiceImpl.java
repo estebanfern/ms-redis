@@ -1,10 +1,10 @@
 package com.esteban.ms.clientes.service.impl;
 
-import com.esteban.ms.clientes.dto.input.ClienteSearchType;
-import com.esteban.ms.clientes.dto.input.CrearClienteInput;
-import com.esteban.ms.clientes.dto.input.EditarClienteInput;
+import com.esteban.ms.clientes.dto.in.ClienteSearchType;
+import com.esteban.ms.clientes.dto.in.CrearClienteIn;
+import com.esteban.ms.clientes.dto.in.EditarClienteIn;
 import com.esteban.ms.clientes.dto.mapper.ClienteMapper;
-import com.esteban.ms.clientes.dto.output.ClienteOutput;
+import com.esteban.ms.clientes.dto.out.ClienteOut;
 import com.esteban.ms.clientes.repository.ClienteRepository;
 import com.esteban.ms.clientes.service.ClienteService;
 import com.esteban.ms.clientes.service.PasswordEncoder;
@@ -31,7 +31,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteOutput crearCliente(CrearClienteInput input) throws MSException {
+    public ClienteOut crearCliente(CrearClienteIn input) throws MSException {
         try {
             log.info("Creating cliente {}", input);
             Cliente cliente = clienteMapper.toEntity(input);
@@ -40,7 +40,7 @@ public class ClienteServiceImpl implements ClienteService {
                     passwordEncoder.hashPassword(cliente.getContrasena())
             );
             cliente = clienteRepository.save(cliente);
-            ClienteOutput output = clienteMapper.toOutput(cliente);
+            ClienteOut output = clienteMapper.toOutput(cliente);
             log.debug("Cliente created {}", output);
             return output;
         } catch (DataIntegrityViolationException e) {
@@ -51,7 +51,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteOutput editarCliente(Long id, EditarClienteInput input) throws MSException {
+    public ClienteOut editarCliente(Long id, EditarClienteIn input) throws MSException {
         try {
             log.info("Editing cliente with id {} -> {}", id, input);
             Cliente cliente = findById(id);
@@ -67,7 +67,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteOutput obtenerCliente(String id, ClienteSearchType type) throws MSException {
+    public ClienteOut obtenerCliente(String id, ClienteSearchType type) throws MSException {
         log.info("Finding cliente with {} {}", type, id);
         try {
             return switch (type) {
