@@ -8,12 +8,17 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface MovimientoMapper {
+
     @Mapping(source = "numeroCuenta", target = "cuenta", qualifiedByName = "cuentaFromNumero")
     Movimiento toEntity(CrearMovimientoIn input);
+
     MovimientoOut toOutput(Movimiento movimiento);
 
+    // Método auxiliar para convertir el número de cuenta a un objeto Cuenta
     @Named("cuentaFromNumero")
     default Cuenta cuentaFromNumero(String numeroCuenta) {
         if (numeroCuenta == null) {
@@ -22,6 +27,13 @@ public interface MovimientoMapper {
         Cuenta cuenta = new Cuenta();
         cuenta.setNumeroCuenta(numeroCuenta);
         return cuenta;
+    }
+
+    // Método para mapear una lista de movimientos (MapStruct puede generarlo automáticamente si se declara)
+    default List<MovimientoOut> toOutput(List<Movimiento> movimientos) {
+        return movimientos.stream()
+            .map(this::toOutput)
+            .toList();
     }
 
 }

@@ -5,21 +5,32 @@ import com.esteban.ms.common.entity.Cuenta;
 import com.esteban.ms.cuentas.dto.out.ReporteCuentaOut;
 import com.esteban.ms.cuentas.dto.out.ReporteOut;
 import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
-public interface ReporteMapper {
+@Mapper(componentModel = "spring", uses = {MovimientoMapper.class})
+public abstract class ReporteMapper {
 
-    default ReporteOut toOutput(Cliente cliente, List<Cuenta> cuentas) {
-        List<ReporteCuentaOut> reportes = toOutput(cuentas);
-        return new ReporteOut(cliente.getNombre(), cliente.getIdentificacion(), cliente.getDireccion(), cliente.getTelefono(), reportes);
+    @Autowired
+    protected MovimientoMapper movimientoMapper;
+
+    public ReporteOut toOutput(Cliente cliente, List<Cuenta> cuentas) {
+        List<ReporteCuentaOut> reportes = cuentas.stream().map(cuenta -> new ReporteCuentaOut(
+            cuenta.getNumeroCuenta(),
+            cuenta.getTipoCuenta(),
+            cuenta.getSaldo(),
+            // Se mapean los movimientos usando el mapper inyectado
+            movimientoMapper.toOutput(cuenta.getMovimientos())
+        )).toList();
+        return new ReporteOut(
+            cliente.getNombre(),
+            cliente.getIdentificacion(),
+            cliente.getDireccion(),
+            cliente.getTelefono(),
+            reportes
+        );
     }
-
-    default List<ReporteCuentaOut> toOutput(List<Cuenta> cuentas) {
-        return cuentas.stream().map(
-            cuenta -> new ReporteCuentaOut(cuenta.getNumeroCuenta(), cuenta.getTipoCuenta(), cuenta.getSaldo(), cuenta.getMovimientos())
-        ).toList();
-    }
-
 }
+
+

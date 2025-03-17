@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -52,6 +53,11 @@ public class MovimientoServiceImpl implements MovimientoService {
         cuentaService.save(cuenta);
         movimiento = movimientoRepository.save(movimiento);
         return movimientoMapper.toOutput(movimiento);
+    }
+
+    @Override
+    public List<Movimiento> findByCuentaIdAndDateBetween(String numeroCuenta, OffsetDateTime begin, OffsetDateTime end) {
+        return movimientoRepository.findAllByCuenta_NumeroCuentaAndFechaBetween(numeroCuenta, begin, end);
     }
 
 }

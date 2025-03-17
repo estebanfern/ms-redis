@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -100,6 +101,11 @@ public class CuentaServiceImpl implements CuentaService {
             );
         }
         cuentaRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Cuenta> findByClienteId(Long clienteId) throws MSException {
+        return cuentaRepository.findAllByCliente_Id(clienteId);
     }
 
 }
