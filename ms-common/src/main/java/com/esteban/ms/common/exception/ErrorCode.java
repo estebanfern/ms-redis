@@ -8,6 +8,8 @@ public enum ErrorCode {
 
     U001("Unexpected error.", 500),
     A001("Illegal argument.", 400),
+    A002("Identification alredy exists.", 400),
+    A003("Cliente not found.", 400),
     N404("Not found.", 404),
     ;
 

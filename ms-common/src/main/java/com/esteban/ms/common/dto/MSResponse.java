@@ -31,4 +31,8 @@ public class MSResponse<T> {
         this.error = error;
     }
 
+    public static <W> MSResponse<W> result(W object) {
+        return new MSResponse<>(object);
+    }
+
 }

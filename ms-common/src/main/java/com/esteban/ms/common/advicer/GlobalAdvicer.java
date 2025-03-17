@@ -6,6 +6,7 @@ import com.esteban.ms.common.exception.ErrorCode;
 import com.esteban.ms.common.exception.Location;
 import com.esteban.ms.common.exception.MSException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -66,6 +67,20 @@ public class GlobalAdvicer {
                     String.format("%s::%s::%s", e.getHttpMethod(), e.getResourcePath(), e.getMessage()),
                     Location.getByMicroserviceName(applicationName).name(),
                     ErrorCode.N404.name()
+                )
+            ),
+            HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<MSResponse<Void>> handle(DataIntegrityViolationException e) {
+        return new ResponseEntity<>(
+            new MSResponse<>(
+                new Error(
+                    e.getMessage(),
+                    Location.getByMicroserviceName(applicationName).name(),
+                    ErrorCode.A001.name()
                 )
             ),
             HttpStatus.NOT_FOUND

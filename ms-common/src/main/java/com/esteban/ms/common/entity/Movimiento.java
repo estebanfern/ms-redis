@@ -31,4 +31,8 @@ public class Movimiento {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "numero_cuenta", nullable = false)
+    private Cuenta cuenta;
+
 }

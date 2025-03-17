@@ -22,6 +22,7 @@ public class MSException extends Exception {
     }
 
     public MSException(Location location, ErrorCode errorCode) {
+        super(errorCode.getMessage());
         this.location = location;
         this.errorCode = errorCode;
     }
