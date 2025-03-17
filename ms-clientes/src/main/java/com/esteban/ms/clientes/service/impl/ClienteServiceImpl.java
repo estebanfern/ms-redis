@@ -33,7 +33,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteOut crearCliente(CrearClienteIn input) throws MSException {
         try {
-            log.info("Creating cliente {}", input);
+            log.info("Creating client {}", input);
             Cliente cliente = clienteMapper.toEntity(input);
             cliente.setActive(Boolean.TRUE);
             cliente.setContrasena(
@@ -41,7 +41,7 @@ public class ClienteServiceImpl implements ClienteService {
             );
             cliente = clienteRepository.save(cliente);
             ClienteOut output = clienteMapper.toOutput(cliente);
-            log.debug("Cliente created {}", output);
+            log.debug("Client created {}", output);
             return output;
         } catch (DataIntegrityViolationException e) {
             String msg = String.format("Identification %s already exists", input.getIdentificacion());
@@ -53,11 +53,11 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public ClienteOut editarCliente(Long id, EditarClienteIn input) throws MSException {
         try {
-            log.info("Editing cliente with id {} -> {}", id, input);
+            log.info("Editing client with id {} -> {}", id, input);
             Cliente cliente = findById(id);
             clienteMapper.updateFromDTO(input, cliente);
             clienteRepository.save(cliente);
-            log.debug("Cliente edited {}", cliente);
+            log.debug("Client edited {}", cliente);
             return clienteMapper.toOutput(cliente);
         } catch (DataIntegrityViolationException e) {
             String msg = String.format("Identification %s already exists", input.getIdentificacion());
@@ -68,13 +68,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteOut obtenerCliente(String id, ClienteSearchType type) throws MSException {
-        log.info("Finding cliente with {} {}", type, id);
+        log.info("Finding client with {} {}", type, id);
         try {
             return switch (type) {
                 case ID -> clienteMapper.toOutput(findById(Long.parseLong(id)));
                 case IDENTIFICACION -> clienteMapper.toOutput(clienteRepository.findClienteByIdentificacion(id).orElseThrow(
                     () -> {
-                        log.warn("Cliente with identificacion {} not found", id);
+                        log.warn("Client with identificacion {} not found", id);
                         return new MSException(
                             Location.CLIENTES,
                             ErrorCode.A003
@@ -92,10 +92,10 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     private Cliente findById(Long id) throws MSException {
-        log.info("Finding cliente with id {}", id);
+        log.info("Finding client with id {}", id);
         return clienteRepository.findById(id).orElseThrow(
             () -> {
-                log.warn("Cliente with id {} not found", id);
+                log.warn("Client with id {} not found", id);
                 return new MSException(
                     Location.CLIENTES,
                     ErrorCode.A003
@@ -106,9 +106,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public void eliminarCliente(Long id) throws MSException {
-        log.info("Deleting cliente with id {}", id);
+        log.info("Deleting client with id {}", id);
         if (!clienteRepository.existsById(id)) {
-            log.warn("Cliente with id {} not found", id);
+            log.warn("Client with id {} not found", id);
             throw new MSException(
                 Location.CLIENTES,
                 ErrorCode.A003
