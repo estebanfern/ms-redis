@@ -1,5 +1,7 @@
 package com.esteban.ms.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +35,7 @@ public class Movimiento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "numero_cuenta", nullable = false)
+    @JsonIgnore
     private Cuenta cuenta;
 
 }

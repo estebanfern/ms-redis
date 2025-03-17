@@ -1,10 +1,13 @@
 package com.esteban.ms.common.exception;
 
+import com.esteban.ms.common.dto.Error;
 import lombok.*;
+
+import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MSException extends Exception {
+public class MSException extends Exception implements Serializable {
 
     private final Location location;
     private final ErrorCode errorCode;
@@ -31,6 +34,20 @@ public class MSException extends Exception {
         super(cause.getMessage(), cause);
         this.location = Location.UNKNOWN;
         this.errorCode = ErrorCode.U001;
+    }
+
+    public MSException(String message, Location location, ErrorCode errorCode) {
+        super(message);
+        this.location = location;
+        this.errorCode = errorCode;
+    }
+
+    public static MSException from(Error error) {
+        return new MSException(
+                error.getMessage(),
+                Location.valueOf(error.getLocation()),
+                ErrorCode.valueOf(error.getCode())
+        );
     }
 
 }

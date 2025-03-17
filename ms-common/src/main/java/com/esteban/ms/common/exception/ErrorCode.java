@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     U001("Unexpected error.", 500),
+    U002("Time out waiting task result.", 500),
 
     A001("Illegal argument.", 400),
     A002("Identification already exists.", 400),

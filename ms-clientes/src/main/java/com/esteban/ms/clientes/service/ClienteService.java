@@ -4,6 +4,7 @@ import com.esteban.ms.clientes.dto.in.ClienteSearchType;
 import com.esteban.ms.clientes.dto.in.CrearClienteIn;
 import com.esteban.ms.clientes.dto.in.EditarClienteIn;
 import com.esteban.ms.clientes.dto.out.ClienteOut;
+import com.esteban.ms.common.entity.Cliente;
 import com.esteban.ms.common.exception.MSException;
 
 public interface ClienteService {
@@ -11,4 +12,5 @@ public interface ClienteService {
     ClienteOut editarCliente(Long id, EditarClienteIn input) throws MSException;
     ClienteOut obtenerCliente(String id, ClienteSearchType type) throws MSException;
     void eliminarCliente(Long id) throws MSException;
+    Cliente findById(Long id) throws MSException;
 }

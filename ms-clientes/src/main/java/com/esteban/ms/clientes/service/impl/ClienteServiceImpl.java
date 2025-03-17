@@ -91,7 +91,8 @@ public class ClienteServiceImpl implements ClienteService {
         }
     }
 
-    private Cliente findById(Long id) throws MSException {
+    @Override
+    public Cliente findById(Long id) throws MSException {
         log.info("Finding client with id {}", id);
         return clienteRepository.findById(id).orElseThrow(
             () -> {
