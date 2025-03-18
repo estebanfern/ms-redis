@@ -7,7 +7,7 @@ import com.esteban.ms.cuentas.dto.in.EditarCuentaIn;
 import com.esteban.ms.cuentas.dto.out.CuentaOut;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CuentaMapper {
 
     @Mapping(source = "clienteId", target = "cliente", qualifiedByName = "clienteFromId")

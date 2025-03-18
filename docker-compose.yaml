@@ -1,0 +1,62 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+  pgsql:
+    image: postgres:latest
+    container_name: pgsql
+    environment:
+      POSTGRES_DB: ms_redis
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5132:5432"
+    volumes:
+      - ms_redis_deploy_data:/var/lib/postgresql/data
+  ms-clientes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MODULE: ms-clientes
+    image: ms-clientes:latest
+    container_name: ms-clientes
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pgsql:5432/ms_redis
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+  ms-cuentas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MODULE: ms-cuentas
+    image: ms-cuentas:latest
+    container_name: ms-cuentas
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pgsql:5432/ms_redis
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+  gateway:
+    image: nginx:latest
+    container_name: gateway
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - ms-clientes
+      - ms-cuentas
+
+volumes:
+  ms_redis_deploy_data:

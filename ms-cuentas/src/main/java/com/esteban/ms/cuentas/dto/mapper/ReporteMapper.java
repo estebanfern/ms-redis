@@ -5,11 +5,12 @@ import com.esteban.ms.common.entity.Cuenta;
 import com.esteban.ms.cuentas.dto.out.ReporteCuentaOut;
 import com.esteban.ms.cuentas.dto.out.ReporteOut;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {MovimientoMapper.class})
+@Mapper(componentModel = "spring", uses = {MovimientoMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class ReporteMapper {
 
     @Autowired
