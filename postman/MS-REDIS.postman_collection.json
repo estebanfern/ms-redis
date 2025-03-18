@@ -176,7 +176,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{server}}:{{port}}/api/v1/cuentas/123123",
+							"raw": "http://{{server}}:{{port}}/api/v1/cuentas/:id",
 							"protocol": "http",
 							"host": [
 								"{{server}}"
@@ -186,29 +186,13 @@
 								"api",
 								"v1",
 								"cuentas",
-								"123123"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://{{server}}:{{port}}/api/v1/cuentas/123123",
-							"protocol": "http",
-							"host": [
-								"{{server}}"
+								":id"
 							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"v1",
-								"cuentas",
-								"123123"
+							"variable": [
+								{
+									"key": "id",
+									"value": "123123"
+								}
 							]
 						}
 					},
@@ -239,6 +223,34 @@
 								"api",
 								"v1",
 								"cuentas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}:{{port}}/api/v1/cuentas/:id",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"cuentas",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
 							]
 						}
 					},
